@@ -9,24 +9,24 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Text('Login Page'),
+          const Text('Login Page'),
           ElevatedButton(
             onPressed: () {
               context.go('/auth/register');
             },
-            child: Text('Navigate to register'),
+            child: const Text('Navigate to register'),
           ),
           ElevatedButton(
             onPressed: () {
               context.go('/auth/recovery-password');
             },
-            child: Text('Navigate to recovery password'),
+            child: const Text('Navigate to recovery password'),
           ),
           ElevatedButton(
             onPressed: () {
               context.go('/call');
             },
-            child: Text('Navigate to call'),
+            child: const Text('Navigate to call'),
           )
         ],
       ),
