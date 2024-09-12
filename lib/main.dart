@@ -1,6 +1,7 @@
 import 'package:emergency_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'core/router.dart';
 
 void main() async {
@@ -8,8 +9,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
