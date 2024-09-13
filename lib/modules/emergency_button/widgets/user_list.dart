@@ -48,7 +48,7 @@ class UserList extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            ' @${users[index].username} (${users[index].name})',
+                            ' (${users[index].name})',
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 16),
                           ),

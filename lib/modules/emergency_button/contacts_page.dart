@@ -107,7 +107,7 @@ class ContactsPage extends StatelessWidget {
                                             ),
                                           ),
                                           Text(
-                                            '@${solicitations[index].values.first.username} (${solicitations[index].values.first.name})',
+                                            '(${solicitations[index].values.first.name})',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16),
@@ -254,7 +254,7 @@ class ContactsPage extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        '${contacts[index].name} (@${contacts[index].username})',
+                                        '${contacts[index].name}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16),

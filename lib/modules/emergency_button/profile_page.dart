@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      ana.username,
+                      ana.name,
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!

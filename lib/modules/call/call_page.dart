@@ -12,7 +12,7 @@ class CallPage extends StatelessWidget {
           Text('Call Page'),
           ElevatedButton(
             onPressed: () {
-              context.pop();
+              context.go('/auth');
             },
             child: Text('Pop to login'),
           )

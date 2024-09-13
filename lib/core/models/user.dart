@@ -3,7 +3,6 @@ import 'package:emergency_app/core/models/notices.dart';
 class User {
   String id;
   String name;
-  String username;
   String email;
   String phone;
   String address;
@@ -11,7 +10,6 @@ class User {
   User({
     required this.id,
     required this.name,
-    required this.username,
     required this.email,
     required this.phone,
     required this.address,
@@ -31,7 +29,6 @@ class User {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
-      username: username ?? this.username,
       email: email ?? this.email,
       phone: phone ?? this.phone,
       address: address ?? this.address,
@@ -43,7 +40,6 @@ class User {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'username': username,
       'email': email,
       'phonenumber': phone,
       'address': address,
@@ -55,7 +51,6 @@ class User {
     return User(
       id: map['id'] as String,
       name: map['name'] as String,
-      username: map['username'] as String,
       email: map['email'] as String,
       phone: map['phonenumber'] as String,
       address: map['address'] as String,
@@ -67,6 +62,6 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, username: $username, email: $email, phone: $phone, address: $address, contacts: $contacts';
+    return 'User(id: $id, name: $name, email: $email contacts: $contacts';
   }
 }

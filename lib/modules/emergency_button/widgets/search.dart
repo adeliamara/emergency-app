@@ -34,10 +34,9 @@ class UserSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     results = users.where((User user) {
       final String name = user.name.toLowerCase();
-      final String username = user.username.toLowerCase();
       final String input = query.toLowerCase();
 
-      return username.contains(input) || name.contains(input);
+      return name.contains(input);
     }).toList();
 
     return results.isEmpty
