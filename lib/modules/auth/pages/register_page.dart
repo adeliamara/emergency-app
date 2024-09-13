@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_app/components/button.dart';
 import 'package:emergency_app/components/input.dart';
-import 'package:emergency_app/modules/auth/pages/login_page.dart';
+import 'package:emergency_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final db = FirebaseFirestore.instance;
 
   RegisterPage({super.key});
 
@@ -32,15 +34,14 @@ class RegisterPage extends StatelessWidget {
     }
 
     try {
-      print('Registering user...');
-      print('Email: $email');
-      print('Name: $name');
-      print('Password: $password');
-
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       final user = userCredential.user;
-      print(userCredential);
+      await db.collection('/users').doc(user!.uid).set({
+        'email': email,
+        'id': user.uid,
+        'name': name,
+      });
 
       _showMessage(context, 'Registration successful!');
 
@@ -48,10 +49,7 @@ class RegisterPage extends StatelessWidget {
       _nameController.clear();
       _passwordController.clear();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+      navigatorKey.currentState!.pop();
     } catch (e) {
       _showMessage(context, 'Registration failed: $e');
     }
@@ -74,9 +72,9 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEFF2F9),
+      backgroundColor: const Color(0xffEFF2F9),
       appBar: AppBar(
-        backgroundColor: Color(0xffEFF2F9),
+        backgroundColor: const Color(0xffEFF2F9),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,7 +83,7 @@ class RegisterPage extends StatelessWidget {
           children: <Widget>[
             Column(children: [
               Image.asset('assets/images/sirene.png'),
-              Text(
+              const Text(
                 "Emergenciers",
                 style: TextStyle(color: Color(0xffff3b30), fontSize: 35),
               )
@@ -97,20 +95,20 @@ class RegisterPage extends StatelessWidget {
                   labelText: 'Email',
                   hintText: 'Email',
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Input(
                   controller: _nameController,
                   labelText: 'Name',
                   hintText: 'Name',
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Input(
                   controller: _passwordController,
                   obscureText: true,
                   labelText: 'Password',
                   hintText: 'Password',
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
               ],
             ),
             Button(

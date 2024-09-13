@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_app/components/button.dart';
 import 'package:emergency_app/components/input.dart';
-import 'package:emergency_app/modules/auth/pages/recovery_password_page.dart';
-import 'package:emergency_app/modules/auth/pages/register_page.dart';
-import 'package:emergency_app/modules/emergency_button/emergency_button_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:emergency_app/main.dart';
+import 'package:emergency_app/modules/auth/pages/recovery_password_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +16,15 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   Future<void> saveToken(String id) async {
-    final token = msg.getToken();
+    try {
+      final token = await msg.getToken();
 
-    await db.collection("/users").doc(id).update({
-      'token': token,
-    });
+      await db.collection("users").doc(id).update({
+        'token_device': token,
+      });
+    } catch (e) {
+      print('token $e');
+    }
   }
 
   Future<void> handleLogin(BuildContext context) async {
@@ -31,7 +33,7 @@ class LoginPage extends StatelessWidget {
 
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Please enter both username and password'),
         ),
       );
@@ -45,15 +47,12 @@ class LoginPage extends StatelessWidget {
         password: _passwordController.text,
       );
 
-      final userId = response.user!.uid!;
+      final userId = response.user!.uid;
 
-      print("got here");
       await saveToken(userId);
 
-      print("got here2");
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Login concluído'),
         ),
       );
@@ -63,25 +62,26 @@ class LoginPage extends StatelessWidget {
 
       navigatorKey.currentState!.pushNamed('/emergency-button');
     } catch (e) {
+      print(e);
       if (e is FirebaseAuthException) {
         if (e.code == 'user-not-found') {
           // Show a specific message for "user-not-found"
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Nenhum usuário foi encontrado para esse email'),
             ),
           );
         } else if (e.code == 'wrong-password') {
           // Show a specific message for "wrong-password"
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Email ou senha inválidos'),
             ),
           );
         } else {
           // Handle other types of errors
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Erro nas suas credenciais'),
             ),
           );
@@ -99,7 +99,7 @@ class LoginPage extends StatelessWidget {
       //   title: Text('Login'),
       //   centerTitle: true,
       // ),
-      backgroundColor: Color(0xffEFF2F9),
+      backgroundColor: const Color(0xffEFF2F9),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -107,7 +107,7 @@ class LoginPage extends StatelessWidget {
           children: <Widget>[
             Column(children: [
               Image.asset('assets/images/sirene.png'),
-              Text(
+              const Text(
                 "Emergenciers",
                 style: TextStyle(color: Color(0xffff3b30), fontSize: 35),
               )
@@ -119,12 +119,12 @@ class LoginPage extends StatelessWidget {
                   hintText: "Email",
                   controller: _emailController,
                   borderRadius: 25.0,
-                  fillColor: Color(0xffF9FBFF),
+                  fillColor: const Color(0xffF9FBFF),
                   prefixIcon: Icons.email,
                   labelText: 'Email',
-                  textColor: Color(0xffBABDC8),
+                  textColor: const Color(0xffBABDC8),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Input(
                   obscureText: true,
                   controller: _passwordController,
@@ -133,9 +133,9 @@ class LoginPage extends StatelessWidget {
                   borderRadius: 25,
                   prefixIcon: Icons.lock,
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 GestureDetector(
-                  child: Text(
+                  child: const Text(
                     "Esqueci minha senha",
                     style: TextStyle(color: Color(0xffff3b30)),
                   ),
@@ -147,26 +147,23 @@ class LoginPage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 22.0),
+                const SizedBox(height: 22.0),
                 Button(
                   text: 'ENTRAR',
                   onPressed: () {
                     handleLogin(context);
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Button(
                   text: 'CRIAR CONTA',
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
+                    navigatorKey.currentState!.pushNamed('/auth/register');
                   },
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),
