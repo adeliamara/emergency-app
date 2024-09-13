@@ -4,8 +4,7 @@ import 'package:emergency_app/modules/auth/pages/recovery_password_page.dart';
 import 'package:emergency_app/modules/auth/pages/register_page.dart';
 import 'package:emergency_app/modules/emergency_button/emergency_button_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:emergency_app/main.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -150,7 +149,7 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
           ],
-        ),
+        ),      
       ),
     );
   }
