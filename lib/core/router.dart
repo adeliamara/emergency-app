@@ -1,13 +1,11 @@
 import 'package:emergency_app/modules/call/full_screen_alert.dart';
 import 'package:emergency_app/modules/call/map_page.dart';
+import 'package:emergency_app/modules/emergency_button/home_page.dart';
 import 'package:flutter/material.dart';
 
 import '../modules/auth/pages/login_page.dart';
 import '../modules/auth/pages/recovery_password_page.dart';
 import '../modules/auth/pages/register_page.dart';
-import '../modules/contacts/contacts_page.dart';
-import '../modules/emergency_button/emergency_button_page.dart';
-import '../modules/profile/profile_page.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -24,13 +22,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => RecoveryPasswordPage());
 
     case '/emergency-button':
-      return MaterialPageRoute(builder: (_) => const EmergencyButtonPage());
+      return MaterialPageRoute(builder: (_) => const HomePage());
 
-    case '/contacts':
-      return MaterialPageRoute(builder: (_) => const ContactsPage());
-
-    case '/profile':
-      return MaterialPageRoute(builder: (_) => const ProfilePage());
 
     case '/notification_alert':
       final args = settings.arguments as Map<String, dynamic>;

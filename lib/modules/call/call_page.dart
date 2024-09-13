@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class EmergencyButtonPage extends StatelessWidget {
-  const EmergencyButtonPage({super.key});
+class CallPage extends StatelessWidget {
+  const CallPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: Column(
         children: [
-          Text('Emergency Button Page'),
+          Text('Call Page'),
           ElevatedButton(
             onPressed: () {
-              context.pop();
+              context.go('/auth');
             },
             child: Text('Pop to login'),
           )
