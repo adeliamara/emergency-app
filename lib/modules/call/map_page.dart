@@ -62,7 +62,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             title: 'Police Station',
             snippet: 'Nearest police station',
           ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
     });
@@ -106,11 +106,17 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 width: double.infinity,
-                height: 200,
+                height: 230,
                 decoration: const BoxDecoration(color: Color(0xFFEFF2F9)),
                 child: Column(
                   children: [
-                    Text('${widget.userName} Precisa de Ajuda'),
+                    const Spacer(),
+                    Text(
+                      '${widget.userName} Precisa de Ajuda',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
                     const Spacer(),
                     const SizedBox(
                       height: 100,

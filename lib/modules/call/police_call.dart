@@ -106,7 +106,7 @@ class _CallPoliceWidgetState extends State<CallPoliceWidget>
         width: double.infinity,
         decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20))),
+            borderRadius: BorderRadius.all(Radius.circular(50))),
         child: Stack(
           children: [
             Align(
