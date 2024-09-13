@@ -12,16 +12,16 @@ import '../modules/profile/profile_page.dart';
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (_) => const LoginPage());
+      return MaterialPageRoute(builder: (_) => LoginPage());
 
     case '/auth':
-      return MaterialPageRoute(builder: (_) => const LoginPage());
+      return MaterialPageRoute(builder: (_) => LoginPage());
 
     case '/auth/register':
-      return MaterialPageRoute(builder: (_) => const RegisterPage());
+      return MaterialPageRoute(builder: (_) => RegisterPage());
 
     case '/auth/recovery-password':
-      return MaterialPageRoute(builder: (_) => const RecoveryPasswordPage());
+      return MaterialPageRoute(builder: (_) => RecoveryPasswordPage());
 
     case '/emergency-button':
       return MaterialPageRoute(builder: (_) => const EmergencyButtonPage());
@@ -52,6 +52,6 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
               ));
 
     default:
-      return MaterialPageRoute(builder: (_) => const LoginPage()); // Fallback
+      return MaterialPageRoute(builder: (_) => LoginPage()); // Fallback
   }
 }

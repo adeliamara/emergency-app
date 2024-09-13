@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 class RecoveryPasswordPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
-  // const RecoveryPasswordPage({super.key});
+  RecoveryPasswordPage({super.key});
 
   Future<void> handlePressed(BuildContext context) async {
     String email = _emailController.text;

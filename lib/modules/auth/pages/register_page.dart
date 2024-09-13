@@ -9,6 +9,8 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  RegisterPage({super.key});
+
   Future<void> onRegister(BuildContext context) async {
     final String email = _emailController.text.trim();
     final String name = _nameController.text.trim();

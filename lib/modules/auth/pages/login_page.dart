@@ -5,10 +5,13 @@ import 'package:emergency_app/modules/auth/pages/register_page.dart';
 import 'package:emergency_app/modules/emergency_button/emergency_button_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:emergency_app/main.dart';
+import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  LoginPage({super.key});
 
   Future<void> handleLogin(BuildContext context) async {
     String username = _emailController.text;
