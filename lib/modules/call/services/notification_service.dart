@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emergency_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,16 +21,21 @@ class LocalNotificationService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
-        navigatorKey.currentState!.pushReplacementNamed(
-          '/notification_alert',
-        );
+        final toJson = jsonDecode(notificationResponse.payload!);
+        navigatorKey.currentState!
+            .pushReplacementNamed('/notification_alert', arguments: {
+          'lat': toJson['lat']!,
+          'long': toJson['long']!,
+          'userName': toJson['userName']!,
+        });
       },
     );
   }
 
   static Future<void> showFullScreenNotification({
-    required String title,
-    required String body,
+    required String lat,
+    required String long,
+    required String userName,
   }) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         const AndroidNotificationDetails(
@@ -45,13 +52,18 @@ class LocalNotificationService {
 
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
+    final body = {
+      'lat': lat,
+      'long': long,
+      'userName': userName,
+    };
+    String jsonString = jsonEncode(body);
 
     await _notificationsPlugin.show(
-      0, // Notification ID
-      title,
-      body,
-      platformChannelSpecifics,
-      payload: 'fullscreen_notification',
-    );
+        0, // Notification ID
+        '$userName está em perigo!',
+        'Clique para ver a localização dele',
+        platformChannelSpecifics,
+        payload: jsonString);
   }
 }

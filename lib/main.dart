@@ -16,10 +16,17 @@ Future<void> getToken() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
+  print('message ${{
+    'lat': message.data['lat']!,
+    'long': message.data['long']!,
+    'userName': message.data['name']!,
+  }}');
   LocalNotificationService.showFullScreenNotification(
-    title: message.notification?.title ?? 'Notification',
-    body: message.notification?.body ?? 'You have a new message',
+    lat: message.data['lat']!,
+    long: message.data['long']!,
+    userName: message.data['name']!,
   );
+
   print('Handling a background message: ${message.messageId}');
 }
 

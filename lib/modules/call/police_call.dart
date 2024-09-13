@@ -12,14 +12,13 @@ class CallPoliceWidget extends StatefulWidget {
 
 class _CallPoliceWidgetState extends State<CallPoliceWidget>
     with SingleTickerProviderStateMixin {
-  // Controlador de animação
   late AnimationController _controller;
   late Animation<Color?> _iconColorAnimation;
   late Animation<double> _iconRotationAnimation;
-  late Animation<double> _textPositionAnimation;
+  late Animation<double> _textOpacityAnimation;
 
-  // Offset atual do arrastar
   double _dragOffset = 0.0;
+  bool _calling = false; // Estado para controlar o texto
 
   @override
   void initState() {
@@ -30,23 +29,25 @@ class _CallPoliceWidgetState extends State<CallPoliceWidget>
       duration: const Duration(milliseconds: 400),
     );
 
-    // Animação para a cor do ícone de telefone
     _iconColorAnimation = ColorTween(
       begin: Colors.grey,
       end: Colors.green,
     ).animate(_controller);
 
-    // Animação para a rotação do ícone
-    _iconRotationAnimation =
-        Tween<double>(begin: 0, end: pi * 2).animate(_controller);
+    _iconRotationAnimation = Tween<double>(
+      begin: 0,
+      end: pi * 2,
+    ).animate(_controller);
 
-    // Animação para a posição do texto (vai subir ao arrastar)
-    _textPositionAnimation = Tween<double>(begin: 0, end: -30)
+    _textOpacityAnimation = Tween<double>(begin: 1.0, end: 0.0)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
-  // Função para ligar para o 190
-  void _callPolice() async {
+  Future<void> _callPolice() async {
+    setState(() {
+      _calling = true; // Define que o usuário está ligando
+    });
+
     const url = 'tel:190';
     if (await canLaunch(url)) {
       await launch(url);
@@ -55,33 +56,39 @@ class _CallPoliceWidgetState extends State<CallPoliceWidget>
     }
   }
 
-  // Função chamada durante o arrastar
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     setState(() {
       _dragOffset += details.primaryDelta!;
+      _dragOffset = _dragOffset.clamp(0.0, 240.0);
 
-      // Define limites para o arrastar
-      if (_dragOffset < 0) {
-        _dragOffset = 0;
-      }
-      if (_dragOffset > 240) _dragOffset = 240;
-
-      // Atualiza a animação com base na posição do arrasto
-      _controller.value = _dragOffset / 240;
+      double normalizedDrag = _dragOffset / 240;
+      _controller.value = normalizedDrag;
     });
   }
 
-  // Função chamada quando o arrastar termina
   void _onHorizontalDragEnd(DragEndDetails details) {
     if (_dragOffset >= 230) {
       _callPolice();
-    }
+      _controller.reset();
+      setState(() {
+        _dragOffset = 0.0;
+      });
+    } else {
+      final double reverseDuration = (240 - _dragOffset) / 240;
 
-    // Reseta a animação e a posição do arrasto
-    setState(() {
-      _dragOffset = 0;
-      _controller.reverse();
-    });
+      _controller
+          .animateBack(0.0,
+              duration: Duration(milliseconds: (400 * reverseDuration).toInt()),
+              curve: Curves.easeOut)
+          .whenComplete(() {
+        if (mounted) {
+          setState(() {
+            _dragOffset = 0.0;
+            _calling = false; // Reset do estado ao retornar
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -102,43 +109,56 @@ class _CallPoliceWidgetState extends State<CallPoliceWidget>
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Stack(
           children: [
-            // Texto "Ligar para Polícia"
             Align(
               alignment: Alignment.center,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 40),
-                child: Transform.translate(
-                  offset: Offset(0, -_textPositionAnimation.value * 3),
-                  child: const Text(
-                    "Ligar para Polícia",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              child: Container(
+                margin: const EdgeInsets.only(left: 24),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _textOpacityAnimation.value,
+                      child: Text(
+                        _calling
+                            ? "Ligando para Polícia..."
+                            : "Ligar para Polícia",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-            // Ícone de telefone com animação de cor e rotação
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
                 margin: EdgeInsets.only(left: _dragOffset),
                 padding: const EdgeInsets.all(16),
-                child: Transform.rotate(
-                  angle: _iconRotationAnimation.value,
-                  child: Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                        color: _iconColorAnimation.value,
-                        borderRadius: BorderRadius.circular(40)),
-                    child: const Icon(
-                      Icons.phone,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return Transform.rotate(
+                      angle: _dragOffset >= 230
+                          ? _iconRotationAnimation
+                              .value // Gira somente se for suficiente
+                          : 0.0, // Sem rotação ao retornar
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                            color: _iconColorAnimation.value,
+                            borderRadius: BorderRadius.circular(40)),
+                        child: const Icon(
+                          Icons.phone,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

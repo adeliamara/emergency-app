@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
 class FullScreenNotificationScreen extends StatefulWidget {
+  final String lat;
+  final String long;
+  final String userName;
   const FullScreenNotificationScreen({
     super.key,
+    required this.lat,
+    required this.long,
+    required this.userName,
   });
 
   @override
@@ -45,23 +51,35 @@ class _FullScreenNotificationScreenState
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => navigatorKey.currentState!.pushReplacementNamed('/call'),
+      onTap: () =>
+          navigatorKey.currentState!.pushReplacementNamed('/map', arguments: {
+        'lat': widget.lat,
+        'long': widget.long,
+        'userName': widget.userName,
+      }),
       child: Scaffold(
         backgroundColor: Colors.red,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Icon(Icons.warning, size: 200, color: Colors.white),
               const Text(
                 'Alerta de Emergência',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 32,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Close Notification'),
+              const SizedBox(height: 4),
+              Text(
+                '${widget.userName.toUpperCase()} ESTÁ EM PERIGO',
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
               ),
+              const SizedBox(height: 4),
             ],
           ),
         ),

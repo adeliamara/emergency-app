@@ -1,5 +1,5 @@
-import 'package:emergency_app/modules/call/call_page.dart';
 import 'package:emergency_app/modules/call/full_screen_alert.dart';
+import 'package:emergency_app/modules/call/map_page.dart';
 import 'package:flutter/material.dart';
 
 import '../modules/auth/pages/login_page.dart';
@@ -33,11 +33,23 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const ProfilePage());
 
     case '/notification_alert':
+      final args = settings.arguments as Map<String, dynamic>;
+      print('args $args');
       return MaterialPageRoute(
-          builder: (_) => const FullScreenNotificationScreen());
+          builder: (_) => FullScreenNotificationScreen(
+                lat: args['lat'] ?? '10',
+                long: args['long'] ?? '10',
+                userName: args['userName'] ?? 'User',
+              ));
 
-    case '/call':
-      return MaterialPageRoute(builder: (_) => const GoogleMapScreen());
+    case '/map':
+      final args = settings.arguments as Map<String, dynamic>;
+      return MaterialPageRoute(
+          builder: (_) => GoogleMapScreen(
+                lat: args['lat']!,
+                long: args['long']!,
+                userName: args['userName']!,
+              ));
 
     default:
       return MaterialPageRoute(builder: (_) => const LoginPage()); // Fallback

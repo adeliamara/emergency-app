@@ -3,7 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleMapScreen extends StatefulWidget {
-  const GoogleMapScreen({super.key});
+  final String lat;
+  final String long;
+  final String userName;
+
+  const GoogleMapScreen({
+    super.key,
+    required this.lat,
+    required this.long,
+    required this.userName,
+  });
 
   @override
   _GoogleMapScreenState createState() => _GoogleMapScreenState();
@@ -13,14 +22,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   // Controlador do Google Maps
   GoogleMapController? _controller;
 
-  // Posição inicial no mapa (coordenadas)
-  final LatLng _initialLatLng =
-      const LatLng(-5.08921, -41.7753); // Example location
+  // Posição inicial no mapa (coordenadas dinâmicas)
+  late final double lat;
+  late final double long;
 
-  final CameraPosition _initialPosition = const CameraPosition(
-    target: LatLng(-5.08921, -41.7753), // São Paulo, Brasil
-    zoom: 12,
-  );
+  late final LatLng _initialLatLng;
+  late final CameraPosition _initialPosition;
 
   // Set for markers and circles
   final Set<Marker> _markers = {};
@@ -29,6 +36,13 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   @override
   void initState() {
     super.initState();
+    lat = double.parse(widget.lat);
+    long = double.parse(widget.long);
+    _initialLatLng = LatLng(lat, long);
+    _initialPosition = CameraPosition(
+      target: _initialLatLng,
+      zoom: 20, // Ajuste o zoom conforme necessário
+    );
     _addMarker();
     _addCircle();
   }
@@ -60,7 +74,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         Circle(
           circleId: const CircleId('radius'),
           center: _initialLatLng,
-          radius: 5000, // 5km radius
+          radius: 20, // 20m radius
           strokeWidth: 2,
           strokeColor: Colors.red,
           fillColor: Colors.red.withOpacity(0.3),
@@ -72,7 +86,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
+      backgroundColor: const Color(0xFFEFF2F9),
       body: SafeArea(
         child: Stack(
           children: [
@@ -93,12 +107,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 padding: const EdgeInsets.all(16),
                 width: double.infinity,
                 height: 200,
-                decoration: const BoxDecoration(color: Color(0xFFE5E5E5)),
-                child: const Column(
+                decoration: const BoxDecoration(color: Color(0xFFEFF2F9)),
+                child: Column(
                   children: [
-                    Text('Joao Precisa de Ajuda'),
-                    Spacer(),
-                    SizedBox(
+                    Text('${widget.userName} Precisa de Ajuda'),
+                    const Spacer(),
+                    const SizedBox(
                       height: 100,
                       child: CallPoliceWidget(),
                     )

@@ -1,3 +1,4 @@
+import 'package:emergency_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,7 +25,7 @@ class LoginPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              context.go('/call');
+              navigatorKey.currentState!.pushReplacementNamed('/map');
             },
             child: const Text('Navigate to call'),
           )
