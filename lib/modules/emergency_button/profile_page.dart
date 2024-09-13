@@ -1,13 +1,13 @@
+import 'package:emergency_app/core/test.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
 
   final userData = {
-    'Email': 'joaosousa@email.com',
-    'Nome': 'Jose Sousa e Silva',
-    'Telefone': '(86) 99987-8763',
+    'Email': ana.email,
+    'Nome': ana.name,
+    'Telefone': ana.phone,
     'Nascimento': '11/04/2004'
   };
 
@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '@joao2023',
+                      ana.username,
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
