@@ -1,5 +1,6 @@
 import 'package:emergency_app/components/button.dart';
 import 'package:emergency_app/components/input.dart';
+import 'package:emergency_app/modules/auth/pages/recovery_password_page.dart';
 import 'package:emergency_app/modules/auth/pages/register_page.dart';
 import 'package:emergency_app/modules/emergency_button/emergency_button_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,14 +50,14 @@ class LoginPage extends StatelessWidget {
           // Show a specific message for "user-not-found"
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('No user found for that email.'),
+              content: Text('Nenhum usuário foi encontrado para esse email'),
             ),
           );
         } else if (e.code == 'wrong-password') {
           // Show a specific message for "wrong-password"
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Wrong password provided for that user.'),
+              content: Text('Email ou senha inválidos'),
             ),
           );
         } else {
@@ -67,15 +68,11 @@ class LoginPage extends StatelessWidget {
             ),
           );
         }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erro nas suas credenciais'),
-          ),
-        );
       }
     }
   }
+
+  hadleTab() {}
 
   @override
   Widget build(BuildContext context) {
@@ -118,15 +115,20 @@ class LoginPage extends StatelessWidget {
                   borderRadius: 25,
                   prefixIcon: Icons.lock,
                 ),
-                // GestureDetector(
-                //   child:
-                // Text(
-                //   "Esqueci minha senha",
-                //   style: TextStyle(color: Color(0xffff3b30)),
-
-                // ),
-                //   onTap: hadleTab,
-                // )
+                SizedBox(height: 10.0),
+                GestureDetector(
+                  child: Text(
+                    "Esqueci minha senha",
+                    style: TextStyle(color: Color(0xffff3b30)),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RecoveryPasswordPage()),
+                    );
+                  },
+                ),
                 SizedBox(height: 22.0),
                 Button(
                   text: 'ENTRAR',
