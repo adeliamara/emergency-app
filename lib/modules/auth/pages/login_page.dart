@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_app/components/button.dart';
 import 'package:emergency_app/components/input.dart';
 import 'package:emergency_app/modules/auth/pages/recovery_password_page.dart';
@@ -5,13 +6,24 @@ import 'package:emergency_app/modules/auth/pages/register_page.dart';
 import 'package:emergency_app/modules/emergency_button/emergency_button_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:emergency_app/main.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final db = FirebaseFirestore.instance;
+  final msg = FirebaseMessaging.instance;
 
   LoginPage({super.key});
+
+  Future<void> saveToken(String id) async {
+    final token = msg.getToken();
+
+    await db.collection("/users").doc(id).update({
+      'token': token,
+    });
+  }
 
   Future<void> handleLogin(BuildContext context) async {
     String username = _emailController.text;
@@ -28,10 +40,17 @@ class LoginPage extends StatelessWidget {
     }
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final response = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      final userId = response.user!.uid!;
+
+      print("got here");
+      await saveToken(userId);
+
+      print("got here2");
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -42,10 +61,7 @@ class LoginPage extends StatelessWidget {
       _emailController.clear();
       _passwordController.clear();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => EmergencyButtonPage()),
-      );
+      navigatorKey.currentState!.pushNamed('/emergency-button');
     } catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == 'user-not-found') {
@@ -152,7 +168,7 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
           ],
-        ),      
+        ),
       ),
     );
   }
