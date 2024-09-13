@@ -1,3 +1,4 @@
+import 'package:emergency_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,24 +10,24 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Text('Login Page'),
+          const Text('Login Page'),
           ElevatedButton(
             onPressed: () {
               context.go('/auth/register');
             },
-            child: Text('Navigate to register'),
+            child: const Text('Navigate to register'),
           ),
           ElevatedButton(
             onPressed: () {
               context.go('/auth/recovery-password');
             },
-            child: Text('Navigate to recovery password'),
+            child: const Text('Navigate to recovery password'),
           ),
           ElevatedButton(
             onPressed: () {
-              context.go('/call');
+              navigatorKey.currentState!.pushReplacementNamed('/map');
             },
-            child: Text('Navigate to call'),
+            child: const Text('Navigate to call'),
           )
         ],
       ),
