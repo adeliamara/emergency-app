@@ -10,10 +10,12 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final db = FirebaseFirestore.instance;
+  final loading = ValueNotifier(false);
 
   RegisterPage({super.key});
 
   Future<void> onRegister(BuildContext context) async {
+    loading.value = true;
     final String email = _emailController.text.trim();
     final String name = _nameController.text.trim();
     final String password = _passwordController.text.trim();
@@ -52,6 +54,8 @@ class RegisterPage extends StatelessWidget {
       navigatorKey.currentState!.pop();
     } catch (e) {
       _showMessage(context, 'Registration failed: $e');
+    } finally {
+      loading.value = false;
     }
   }
 
@@ -111,13 +115,19 @@ class RegisterPage extends StatelessWidget {
                 const SizedBox(height: 16.0),
               ],
             ),
-            Button(
-              height: 50,
-              text: 'CRIAR CONTA',
-              onPressed: () {
-                onRegister(context);
+            ValueListenableBuilder(
+              valueListenable: loading,
+              builder: (context, value, child) {
+                return Button(
+                  height: 50,
+                  isLoading: value,
+                  text: 'CRIAR CONTA',
+                  onPressed: () {
+                    onRegister(context);
+                  },
+                );
               },
-            ),
+            )
           ],
         ),
       ),

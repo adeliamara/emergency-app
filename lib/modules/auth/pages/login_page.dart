@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final db = FirebaseFirestore.instance;
   final msg = FirebaseMessaging.instance;
+  final loading = ValueNotifier(false);
 
   LoginPage({super.key});
 
@@ -28,20 +29,21 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> handleLogin(BuildContext context) async {
+    loading.value = true;
     String username = _emailController.text;
     String password = _passwordController.text;
 
-    if (username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter both username and password'),
-        ),
-      );
-
-      return;
-    }
-
     try {
+      if (username.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter both username and password'),
+          ),
+        );
+        loading.value = false;
+        return;
+      }
+
       final response = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
@@ -87,6 +89,8 @@ class LoginPage extends StatelessWidget {
           );
         }
       }
+    } finally {
+      loading.value = false;
     }
   }
 
@@ -148,12 +152,17 @@ class LoginPage extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 22.0),
-                Button(
-                  text: 'ENTRAR',
-                  onPressed: () {
-                    handleLogin(context);
-                  },
-                ),
+                ValueListenableBuilder(
+                    valueListenable: loading,
+                    builder: (context, value, child) {
+                      return Button(
+                        isLoading: value,
+                        text: 'ENTRAR',
+                        onPressed: () {
+                          handleLogin(context);
+                        },
+                      );
+                    }),
                 const SizedBox(height: 16.0),
                 Button(
                   text: 'CRIAR CONTA',
