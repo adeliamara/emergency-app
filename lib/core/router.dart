@@ -4,15 +4,13 @@ import '../modules/auth/pages/login_page.dart';
 import '../modules/auth/pages/recovery_password_page.dart';
 import '../modules/auth/pages/register_page.dart';
 import '../modules/call/call_page.dart';
-import '../modules/contacts/contacts_page.dart';
-import '../modules/emergency_button/emergency_button_page.dart';
-import '../modules/profile/profile_page.dart';
+import '../modules/emergency_button/home_page.dart';
 
 GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      redirect: (context, state) => '/auth',
+      redirect: (context, state) => '/home',
       routes: [
         GoRoute(
           path: 'auth',
@@ -29,16 +27,8 @@ GoRouter router = GoRouter(
           ],
         ),
         GoRoute(
-          path: 'emergency-button',
-          builder: (context, state) => EmergencyButtonPage(),
-        ),
-        GoRoute(
-          path: 'contacts',
-          builder: (context, state) => ContactsPage(),
-        ),
-        GoRoute(
-          path: 'profile',
-          builder: (context, state) => ProfilePage(),
+          path: 'home',
+          builder: (context, state) => HomePage(),
         ),
         GoRoute(
           path: 'call',
